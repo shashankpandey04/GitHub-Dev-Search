@@ -1,39 +1,36 @@
-function searchUsers() {
-    const location = document.getElementById('searchInput').value;
-    const apiUrl = `https://api.github.com/search/users?q=location:${location}`;
+function openImageModal(avatarUrl) {
+    const modalContent = document.createElement('div');
+    modalContent.innerHTML = `<span class="close" onclick="closeModal()">&times;</span><img src="${avatarUrl}" alt="Profile Picture" style="width: 100%; border-radius: 8px;">`;
+    openModal(modalContent);
+}
 
-    fetch(apiUrl)
+function openUserModal(username) {
+    fetch(`https://api.github.com/users/${username}`)
         .then(response => response.json())
-        .then(data => {
-            const searchResults = document.getElementById('searchResults');
-            searchResults.innerHTML = '';
-
-            data.items.forEach(user => {
-                const userCard = document.createElement('div');
-                userCard.classList.add('user-card');
-
-                const avatar = document.createElement('img');
-                avatar.src = user.avatar_url;
-                userCard.appendChild(avatar);
-
-                const username = document.createElement('p');
-                username.textContent = user.login;
-                userCard.appendChild(username);
-                fetch(`https://api.github.com/users/${user.login}`)
-                    .then(response => response.json())
-                    .then(userData => {
-                        const bio = document.createElement('p');
-                        bio.textContent = userData.bio || 'No bio available';
-                        userCard.appendChild(bio);
-
-                        const followers = document.createElement('p');
-                        followers.textContent = `Followers: ${userData.followers}`;
-                        userCard.appendChild(followers);
-                    })
-                    .catch(error => console.error('Error fetching user details:', error));
-
-                searchResults.appendChild(userCard);
-            });
+        .then(userData => {
+            const modalContent = document.createElement('div');
+            modalContent.innerHTML = `
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>${userData.name || userData.login}</h2>
+                <p><strong>Bio:</strong> ${userData.bio || 'No bio available'}</p>
+                <p><strong>Followers:</strong> ${userData.followers}</p>
+                <p><strong>Public Repos:</strong> ${userData.public_repos}</p>
+                <p><strong>Location:</strong> ${userData.location || 'Unknown'}</p>
+                <a href="${userData.html_url}" target="_blank">View Profile</a>
+            `;
+            openModal(modalContent);
         })
-        .catch(error => console.error('Error fetching data:', error));
+        .catch(error => console.error('Error fetching user data:', error));
+}
+
+function openModal(content) {
+    const modal = document.getElementById('userModal');
+    const modalContent = document.getElementById('userModalContent');
+    modalContent.innerHTML = '';
+    modalContent.appendChild(content);
+    modal.style.display = 'block';
+}
+
+function closeModal() {
+    document.getElementById('userModal').style.display = 'none';
 }

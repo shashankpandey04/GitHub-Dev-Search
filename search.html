@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Users</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Additional CSS styles specific to this page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #343a40; /* Dark mode background color */
+            color: #fff; /* Text color */
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #454d55; /* Dark mode container background color */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #007bff; /* Heading color */
+        }
+
+        .search-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 70%;
+            border: 2px solid #007bff; /* Input border color */
+            border-radius: 5px;
+            background-color: #495057; /* Dark mode input background color */
+            color: #fff; /* Input text color */
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #0056b3; /* Input border color on focus */
+            outline: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .user-container {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .user-info {
+            background-color: #495057; /* Dark mode user info background color */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .user-info img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .user-details {
+            padding: 20px;
+        }
+
+        .user-details h2 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #007bff; /* Username color */
+        }
+
+        .user-details p {
+            margin: 0;
+            color: #fff; /* Text color */
+        }
+
+        .github-button {
+            margin-top: 10px;
+        }
+
+        .github-button a {
+            text-decoration: none;
+            color: #fff;
+            padding: 8px 20px;
+            background-color: #007bff;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .github-button a:hover {
+            background-color: #0056b3;
+        }
+        nav {
+            background-color: #343a40; /* Dark mode navigation bar background color */
+            padding: 10px 20px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #007bff;
+        }
+    </style>
+    <script>
+        // Function to search users by username
+        function searchByUsername() {
+            const searchInput = document.getElementById('searchInput').value.trim();
+
+            if (searchInput === '') {
+                alert('Please enter a username.');
+                return;
+            }
+
+            // Clear previous search results
+            const searchResultsContainer = document.getElementById('searchResults');
+            searchResultsContainer.innerHTML = '';
+
+            // Fetch user data from GitHub API
+            fetch(`https://api.github.com/users/${searchInput}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch user data.');
+                    }
+                    return response.json();
+                })
+                .then(userData => {
+                    displayUser(userData);
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        }
+
+        // Function to display user data
+        function displayUser(userData) {
+            const searchResultsContainer = document.getElementById('searchResults');
+
+            // Create user info container
+            const userInfoContainer = document.createElement('div');
+            userInfoContainer.classList.add('user-info');
+
+            // Create profile picture
+            const profilePicture = document.createElement('img');
+            profilePicture.src = userData.avatar_url;
+            profilePicture.alt = `${userData.login} Avatar`;
+
+            // Create user details container
+            const userDetails = document.createElement('div');
+            userDetails.classList.add('user-details');
+
+            // Create username heading
+            const usernameHeading = document.createElement('h2');
+            usernameHeading.textContent = userData.login;
+
+            // Create bio paragraph
+            const bioPara = document.createElement('p');
+            bioPara.textContent = `Bio: ${userData.bio || 'Not available'}`;
+
+            // Create followers paragraph
+            const followersPara = document.createElement('p');
+            followersPara.textContent = `Followers: ${userData.followers}`;
+
+            // Append user details
+            userDetails.appendChild(usernameHeading);
+            userDetails.appendChild(bioPara);
+            userDetails.appendChild(followersPara);
+
+            // Append profile picture and user details
+            userInfoContainer.appendChild(profilePicture);
+            userInfoContainer.appendChild(userDetails);
+
+            // Append user info container to search results
+            searchResultsContainer.appendChild(userInfoContainer);
+
+            // Create GitHub button
+            const githubButton = document.createElement('div');
+            githubButton.classList.add('github-button');
+            const githubLink = document.createElement('a');
+            githubLink.href = userData.html_url;
+            githubLink.target = "_blank";
+            githubLink.textContent = "View on GitHub";
+            githubButton.appendChild(githubLink);
+            searchResultsContainer.appendChild(githubButton);
+        }
+    </script>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="location-dev.html">Location-based Search</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>Search Users</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Enter username...">
+            <button onclick="searchByUsername()">Search</button>
+        </div>
+        <div id="searchResults" class="user-container"></div>
+    </div>
+    <div id="userModal" class="modal">
+        <div class="modal-content" id="userModalContent"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

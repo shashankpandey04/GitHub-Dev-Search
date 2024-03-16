@@ -3,88 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Github Users Search</title>
+    <title>Github Users Search - Landing Page</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-      body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f0f0f0;
-}
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url(https://imageio.forbes.com/specials-images/imageserve/636abbf0793eeb0971af29b7/0x0.jpg?format=jpg&height=900&width=1600&fit=bounds);
+            color: rgb(255, 255, 255);
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-}
+        .container {
+            text-align: center;
+            opacity: 0; /* Initially hide the content */
+            animation: fadeIn 1s forwards; /* Apply fade-in animation */
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 2;
+            }
+        }
 
-h1 {
-    text-align: center;
-}
+        h1 {
+            margin-bottom: 20px;
+            color: rgba(181, 255, 184, 0.874);
+        }
 
-.search-container {
-    margin-bottom: 20px;
-}
+        p {
+            margin-bottom: 30px;
+        }
 
-input[type="text"] {
-    padding: 8px;
-    width: 70%;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
+        a {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
 
-button {
-    padding: 8px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-#searchResults {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-
-.user-card {
-    width: calc(33.33% - 20px);
-    margin-bottom: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.user-card img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    margin-bottom: 10px;
-}
-
-.user-card p {
-    margin: 0;
-}
-
+        a:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Github Users Search</h1>
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Enter location...">
-            <button onclick="searchUsers()">Search</button>
-        </div>
-        <div id="searchResults"></div>
+        <h1>Welcome to Github Users Search</h1>
+        <p>Find Github users based on location or search by username.</p>
+        <p>Made By: Shashank Pandey</p>
+        <a href="location-dev.html">Location Based Search</a>
+        <a href="search.html">Username Search</a>
     </div>
-    <script src="script.js"></script>
 </body>
 </html>
